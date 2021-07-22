@@ -4,12 +4,25 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.Navigation
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.androidlabentryapp.R
 
 class AuthFragment : Fragment() {
-    override fun onCreateView(
+    private lateinit var navController: NavController
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        navController = this.findNavController()
+    }
+
+    override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -22,6 +35,16 @@ class AuthFragment : Fragment() {
     }
 
     private fun initUi(rootView: View) {
+        val enterButton = rootView.findViewById<Button>(R.id.auth_button_enter).apply {
+            setOnClickListener {
+                navController.navigate(R.id.action_authFragment_to_accountFragment)
+            }
+        }
 
+        val registerTextView = rootView.findViewById<TextView>(R.id.auth_text_register).apply {
+            setOnClickListener {
+                navController.navigate(R.id.action_authFragment_to_registerFragment)
+            }
+        }
     }
 }
