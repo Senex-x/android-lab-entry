@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "37614936988",
+    "firebase_url": "https://android-entry-app-default-rtdb.firebaseio.com",
+    "project_id": "android-entry-app",
+    "storage_bucket": "android-entry-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:37614936988:android:404f747c38d7666c5a9e59",
+        "android_client_info": {
+          "package_name": "com.androidlabentryapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "37614936988-bhmh8049fsrgaq9v4je1rs5u15dao3ij.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDZz71tEoIMK70dqmA75nFMWJkaofHfu6E"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "37614936988-bhmh8049fsrgaq9v4je1rs5u15dao3ij.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
