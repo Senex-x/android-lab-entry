@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_size_default">16sp</dimen>
+    <dimen name="text_size_big">20sp</dimen>
+    <dimen name="bar_height_default">42dp</dimen>
+    <dimen name="size_4">4dp</dimen>
+    <dimen name="size_default">8dp</dimen>
+    <dimen name="size_10">10dp</dimen>
+    <dimen name="icon_size_default">28dp</dimen>
+</resources>
