@@ -5,6 +5,8 @@ import android.util.Log
 import android.widget.Toast
 import com.androidlabentryapp.models.User
 import com.google.gson.Gson
+import java.math.BigInteger
+import java.security.MessageDigest
 import java.util.regex.Pattern
 
 internal const val EMAIL_VALIDATION_REGEX =
@@ -35,10 +37,10 @@ internal fun Context.getTextFromFile(fileName: String) =
         }
     }
 
-internal fun Context.getCurrentUser() =
+internal fun Context.getCurrentUserLocally() =
     deserializeObject<User>(getTextFromFile(CURRENT_USER_FILE_NAME))
 
-internal fun Context.saveCurrentUser(user: User) =
+internal fun Context.saveCurrentUserLocally(user: User) =
     with(this) {
         log("Saving current user")
         saveTextToFile(CURRENT_USER_FILE_NAME, serializeObject(user))
@@ -61,3 +63,10 @@ internal fun isEmailValid(email: String) =
 internal fun isPasswordValid(password: String) =
     password.length > 5 &&
             Pattern.compile(PASSWORD_VALIDATION_REGEX).matcher(password).matches()
+
+internal fun encodeString(string: String): String {
+    val md = MessageDigest.getInstance("MD5")
+    return BigInteger(1, md.digest(string.toByteArray()))
+        .toString(16)
+        .padStart(32, '0')
+}

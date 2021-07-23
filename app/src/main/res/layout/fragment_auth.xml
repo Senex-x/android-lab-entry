@@ -32,8 +32,8 @@
                 android:layout_height="@dimen/bar_height_default"
                 android:background="@drawable/rectangle_rounded_outline"
                 android:hint="Введите логин"
-                android:text="vdm.snx@gmail.com"
                 android:inputType="textEmailAddress"
+                android:text="vdm.snx@gmail.com"
                 android:textAlignment="center"
                 android:theme="@style/edit_text_theme_default"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -44,13 +44,13 @@
             <EditText
                 android:id="@+id/auth_edit_text_password"
                 style="@style/edit_text_style_default"
-                android:text="Password1"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/bar_height_default"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/rectangle_rounded_outline"
                 android:hint="@string/auth_hint_enter_password"
                 android:inputType="textPassword"
+                android:text="Password1"
                 android:textAlignment="center"
                 android:theme="@style/edit_text_theme_default"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -58,23 +58,37 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
+                <TextView
+                    android:layout_marginTop="16dp"
+                    android:id="@+id/auth_text_register_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Еще нет аккаунта?"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="@dimen/text_size_default" />
+
+                <TextView
+                    android:id="@+id/auth_text_register"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Зарегестрироваться"
+                    android:textColor="@color/primary"
+                    android:textStyle="italic"
+                    android:textSize="@dimen/text_size_default" />
+
+
             <Button
                 android:id="@+id/auth_button_enter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="10dp"
                 android:text="@string/auth_button_enter"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/auth_edit_text_password" />
 
-            <TextView
-                android:id="@+id/auth_text_register"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Зарегестрироваться"
-                android:textColor="@color/dark_gray"
-                android:textSize="@dimen/text_size_default" />
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

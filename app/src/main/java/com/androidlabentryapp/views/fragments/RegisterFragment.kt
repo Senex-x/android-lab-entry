@@ -12,10 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.androidlabentryapp.R
+import com.androidlabentryapp.models.User
+import com.androidlabentryapp.utils.*
 import com.androidlabentryapp.utils.isEmailValid
 import com.androidlabentryapp.utils.isPasswordValid
 import com.androidlabentryapp.utils.isStringPresent
 import com.androidlabentryapp.utils.toast
+import com.androidlabentryapp.views.dialogs.LoadingDialogFragment
 
 class RegisterFragment : Fragment() {
     private lateinit var navController: NavController
@@ -41,61 +44,86 @@ class RegisterFragment : Fragment() {
     }
 
     private fun initUi(rootView: View) {
-        val enterTextView = rootView.findViewById<TextView>(R.id.register_text_enter).apply {
-            setOnClickListener {
-                navController.navigate(R.id.action_registerFragment_to_authFragment)
-            }
-        }
-
         val nameEditText = rootView.findViewById<EditText>(R.id.register_edit_text_name)
         val surnameEditText = rootView.findViewById<EditText>(R.id.register_edit_text_surname)
         val emailEditText = rootView.findViewById<EditText>(R.id.register_edit_text_login)
         val passwordEditText = rootView.findViewById<EditText>(R.id.register_edit_text_password)
-        val confirmPasswordEditText = rootView.findViewById<EditText>(R.id.register_edit_text_password_confirm)
+        val confirmPasswordEditText =
+            rootView.findViewById<EditText>(R.id.register_edit_text_password_confirm)
 
         val registerButton = rootView.findViewById<Button>(R.id.register_button_register).apply {
             setOnClickListener {
+                val loadingDialog = LoadingDialogFragment()
+                loadingDialog.show(requireActivity().supportFragmentManager, "loadingDialog")
+
                 val name = nameEditText.text.toString()
                 val surname = surnameEditText.text.toString()
                 val email = emailEditText.text.toString()
                 val password = passwordEditText.text.toString()
                 val confirmPassword = confirmPasswordEditText.text.toString()
 
-                if(!isStringPresent(name)) {
+                if (!isStringPresent(name) && name.length > 1) {
                     contextState.toast("Введите имя")
                     return@setOnClickListener
                 }
 
-                if(!isStringPresent(surname)) {
+                if (!isStringPresent(surname) && surname.length > 1) {
                     contextState.toast("Введите фамилию")
                     return@setOnClickListener
                 }
 
-                if(!isEmailValid(email)) {
+                if (!isEmailValid(email)) {
                     contextState.toast("Недопустимый почтовый адрес")
                     return@setOnClickListener
                 }
 
-                if(!isPasswordValid(password)) {
+                if (!isPasswordValid(password)) {
                     passwordEditText.setText("")
                     confirmPasswordEditText.setText("")
                     contextState.toast("Недопустимый пароль")
                     return@setOnClickListener
                 }
 
-                if(password != confirmPassword) {
+                if (password != confirmPassword) {
                     passwordEditText.setText("")
                     confirmPasswordEditText.setText("")
                     contextState.toast("Пароли не совпадают")
                     return@setOnClickListener
                 }
 
-                navController.navigate(R.id.action_registerFragment_to_accountFragment)
+                isEmailPresent(email) { isPresent ->
+                    loadingDialog.dismiss()
+                    if (isPresent) {
+                        contextState.toast("Почтовый адрес занят")
+                    } else {
+                        val newUser = User(
+                            email,
+                            password,
+                            name[0].uppercaseChar() + name.substring(1),
+                            surname[0].uppercaseChar() + surname.substring(1)
+                        )
+                        saveUserToCloud(newUser)
+                        contextState.saveCurrentUserLocally(newUser)
+
+                        navController.navigate(R.id.action_registerFragment_to_accountFragment)
+                    }
+                }
             }
         }
+
+        // TODO: Красиво
+        val navigationAction: (View) -> Unit = {
+            navController.navigate(R.id.action_registerFragment_to_authFragment)
+        }
+
+        val enterTextView =
+            rootView.findViewById<TextView>(R.id.register_text_enter).apply {
+                setOnClickListener(navigationAction)
+            }
+
+        val enterDescTextView =
+            rootView.findViewById<TextView>(R.id.register_text_enter_desc).apply {
+                setOnClickListener(navigationAction)
+            }
     }
-
-
-
-
 }

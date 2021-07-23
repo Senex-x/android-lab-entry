@@ -28,30 +28,9 @@
                 android:orientation="vertical"
                 android:padding="8dp">
 
-                <TextView
-                    android:id="@+id/register_text_enter_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:text="Уже есть аккаунт?"
-                    android:textColor="@color/dark_gray"
-                    android:textSize="@dimen/text_size_default" />
-
-                <TextView
-                    android:id="@+id/register_text_enter"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Войти"
-                    android:textColor="@color/primary"
-                    android:textSize="@dimen/text_size_default"
-                    android:textStyle="italic" />
-
                 <ImageView
                     android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_height="wrap_content"
                     android:background="@color/primary"
                     app:srcCompat="@drawable/ic_launcher_foreground" />
 
@@ -111,8 +90,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
                     android:gravity="center_horizontal"
-                    android:textColor="@color/dark_gray"
-                    android:text="Пароль должен состоять из букв латинского алфавита и содержать минимум одну цифру, одну строчную и заглавную буквы." />
+                    android:text="Пароль должен состоять из букв латинского алфавита и содержать минимум одну цифру, одну строчную и заглавную буквы."
+                    android:textColor="@color/dark_gray" />
 
                 <EditText
                     android:id="@+id/register_edit_text_password"
@@ -148,20 +127,54 @@
         android:id="@+id/register_card_view_footer"
         style="@style/card_view_style_default"
         android:layout_width="match_parent"
-        app:cardCornerRadius="10dp"
         android:layout_height="wrap_content"
+        app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <Button
-            android:id="@+id/register_button_register"
+        <LinearLayout
+            android:padding="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:text="Зарегестрироваться"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/auth_edit_text_password" />
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:paddingBottom="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/register_text_enter_desc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:gravity="center"
+                    android:text="Уже есть аккаунт?"
+                    android:textColor="@color/dark_gray"
+                    android:textSize="@dimen/text_size_default" />
+
+                <TextView
+                    android:id="@+id/register_text_enter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="Войти"
+                    android:textColor="@color/primary"
+                    android:textSize="@dimen/text_size_default"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+            <Button
+                android:id="@+id/register_button_register"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Зарегестрироваться"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/auth_edit_text_password" />
+        </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -13,7 +13,7 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.androidlabentryapp.R
 import com.androidlabentryapp.models.User
-import com.androidlabentryapp.utils.getCurrentUser
+import com.androidlabentryapp.utils.getCurrentUserLocally
 
 class AccountFragment : Fragment() {
     private lateinit var navController: NavController
@@ -25,7 +25,7 @@ class AccountFragment : Fragment() {
 
         navController = this.findNavController()
         contextState = requireContext()
-        currentUser = contextState.getCurrentUser()
+        currentUser = contextState.getCurrentUserLocally()
     }
 
     override fun onCreateView(

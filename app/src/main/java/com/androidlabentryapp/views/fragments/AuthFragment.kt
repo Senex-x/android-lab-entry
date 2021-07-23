@@ -12,12 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.androidlabentryapp.R
-import com.androidlabentryapp.utils.getUserOrNull
 import com.androidlabentryapp.utils.*
-import com.androidlabentryapp.utils.EMAIL_VALIDATION_REGEX
-import com.androidlabentryapp.utils.toast
 import com.androidlabentryapp.views.dialogs.LoadingDialogFragment
-import java.util.regex.Pattern
 
 class AuthFragment : Fragment() {
     private lateinit var navController: NavController
@@ -71,7 +67,7 @@ class AuthFragment : Fragment() {
                         emailEditText.setText("")
                         passwordEditText.setText("")
 
-                        contextState.saveCurrentUser(it)
+                        contextState.saveCurrentUserLocally(it)
                         navController.navigate(R.id.action_authFragment_to_accountFragment)
                     } else {
                         contextState.toast("Пользователь не найден")
@@ -81,10 +77,18 @@ class AuthFragment : Fragment() {
             }
         }
 
-        val registerTextView = rootView.findViewById<TextView>(R.id.auth_text_register).apply {
-            setOnClickListener {
-                navController.navigate(R.id.action_authFragment_to_registerFragment)
+        // TODO: красиво
+        val navigationAction: (View) -> Unit = {
+            navController.navigate(R.id.action_authFragment_to_registerFragment)
+        }
+
+        val registerDescTextView =
+            rootView.findViewById<TextView>(R.id.auth_text_register_desc).apply {
+                setOnClickListener(navigationAction)
             }
+
+        val registerTextView = rootView.findViewById<TextView>(R.id.auth_text_register).apply {
+            setOnClickListener(navigationAction)
         }
     }
 }
