@@ -32,6 +32,7 @@
                 android:layout_height="@dimen/bar_height_default"
                 android:background="@drawable/rectangle_rounded_outline"
                 android:hint="Введите логин"
+                android:text="vdm.snx@gmail.com"
                 android:inputType="textEmailAddress"
                 android:textAlignment="center"
                 android:theme="@style/edit_text_theme_default"
@@ -43,6 +44,7 @@
             <EditText
                 android:id="@+id/auth_edit_text_password"
                 style="@style/edit_text_style_default"
+                android:text="Password1"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/bar_height_default"
                 android:layout_marginTop="16dp"

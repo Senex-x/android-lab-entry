@@ -2,7 +2,6 @@ package com.androidlabentryapp.views.fragments
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,17 +12,11 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.androidlabentryapp.R
-import com.androidlabentryapp.database.getUserOrNull
-import com.androidlabentryapp.models.User
+import com.androidlabentryapp.utils.getUserOrNull
 import com.androidlabentryapp.utils.*
-import com.androidlabentryapp.utils.CURRENT_USER_FILE_NAME
 import com.androidlabentryapp.utils.EMAIL_VALIDATION_REGEX
-import com.androidlabentryapp.utils.saveTextToFile
 import com.androidlabentryapp.utils.toast
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.androidlabentryapp.views.dialogs.LoadingDialogFragment
 import java.util.regex.Pattern
 
 class AuthFragment : Fragment() {
@@ -34,6 +27,7 @@ class AuthFragment : Fragment() {
         super.onCreate(savedInstanceState)
 
         navController = this.findNavController()
+        contextState = requireContext()
     }
 
     override fun onCreateView(
@@ -42,8 +36,6 @@ class AuthFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_auth, container, false)
-
-        contextState = requireContext()
 
         initUi(rootView)
 
@@ -71,16 +63,20 @@ class AuthFragment : Fragment() {
                     return@setOnClickListener
                 }
 
+                val loadingDialog = LoadingDialogFragment()
+                loadingDialog.show(requireActivity().supportFragmentManager, "loadingDialog")
+
                 getUserOrNull(email, password) {
                     if (it != null) {
                         emailEditText.setText("")
                         passwordEditText.setText("")
 
-                        saveUserState(it)
-
-                        navController.navigate(R.id.action_authFragment_to_accountFragment)                    } else {
+                        contextState.saveCurrentUser(it)
+                        navController.navigate(R.id.action_authFragment_to_accountFragment)
+                    } else {
                         contextState.toast("Пользователь не найден")
                     }
+                    loadingDialog.dismiss()
                 }
             }
         }
@@ -91,15 +87,4 @@ class AuthFragment : Fragment() {
             }
         }
     }
-
-    private fun saveUserState(user: User) {
-        log("Saving current user info to file")
-        contextState.saveTextToFile(CURRENT_USER_FILE_NAME, serializeObject(user))
-    }
-
-    private fun isEmailValid(email: String) =
-        Pattern.compile(EMAIL_VALIDATION_REGEX).matcher(email).matches()
-
-    private fun isPasswordValid(password: String) =
-        password.isNotEmpty() || password.length > 5
 }

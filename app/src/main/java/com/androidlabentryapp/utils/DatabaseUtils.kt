@@ -1,7 +1,6 @@
-package com.androidlabentryapp.database
+package com.androidlabentryapp.utils
 
 import com.androidlabentryapp.models.User
-import com.androidlabentryapp.utils.log
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -15,6 +14,7 @@ internal fun getUserOrNull(email: String, password: String, callback: (User?) ->
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (userSnapshot in dataSnapshot.children) {
                     if (password == userSnapshot.child("password").getValue(String::class.java))
+                        log("Got matching user: $userSnapshot")
                         callback.invoke(
                             User(
                                 email,
@@ -28,6 +28,7 @@ internal fun getUserOrNull(email: String, password: String, callback: (User?) ->
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
+                log("Matching user not found")
                 callback.invoke(null)
             }
         })
