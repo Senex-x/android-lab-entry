@@ -37,14 +37,18 @@ internal fun Context.getTextFromFile(fileName: String) =
         }
     }
 
-internal fun Context.getCurrentUserLocally() =
+internal fun Context.getCurrentUser() =
     deserializeObject<User>(getTextFromFile(CURRENT_USER_FILE_NAME))
 
-internal fun Context.saveCurrentUserLocally(user: User) =
+internal fun Context.saveCurrentUser(user: User) =
     with(this) {
         log("Saving current user")
         saveTextToFile(CURRENT_USER_FILE_NAME, serializeObject(user))
     }
+
+internal fun Context.deleteCurrentUser() =
+    deleteFileWithLogging(CURRENT_USER_FILE_NAME)
+
 
 internal fun <T> serializeObject(generic: T): String {
     return Gson().toJson(generic)
@@ -64,9 +68,4 @@ internal fun isPasswordValid(password: String) =
     password.length > 5 &&
             Pattern.compile(PASSWORD_VALIDATION_REGEX).matcher(password).matches()
 
-internal fun encodeString(string: String): String {
-    val md = MessageDigest.getInstance("MD5")
-    return BigInteger(1, md.digest(string.toByteArray()))
-        .toString(16)
-        .padStart(32, '0')
-}
+

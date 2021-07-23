@@ -19,11 +19,24 @@ class AuthFragment : Fragment() {
     private lateinit var navController: NavController
     private lateinit var contextState: Context
 
+    private val navigationActionToAccount: (View?) -> Unit = {
+        navController.navigate(R.id.action_authFragment_to_accountFragment)
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         navController = this.findNavController()
         contextState = requireContext()
+
+        try {
+            contextState.getTextFromFile(CURRENT_USER_FILE_NAME)
+            log("Local user found")
+            navigationActionToAccount.invoke(null)
+        } catch (e: Exception) {
+            log("Local user not found")
+        }
     }
 
     override fun onCreateView(
@@ -39,12 +52,12 @@ class AuthFragment : Fragment() {
     }
 
     private fun initUi(rootView: View) {
-        val emailEditText = rootView.findViewById<EditText>(R.id.auth_edit_text_login)
+        with(rootView) {
+            val emailEditText = findViewById<EditText>(R.id.auth_edit_text_login)
 
-        val passwordEditText = rootView.findViewById<EditText>(R.id.auth_edit_text_password)
+            val passwordEditText = findViewById<EditText>(R.id.auth_edit_text_password)
 
-        val enterButton = rootView.findViewById<Button>(R.id.auth_button_enter).apply {
-            setOnClickListener {
+            findViewById<Button>(R.id.auth_button_enter).setOnClickListener {
                 val email = emailEditText.text.toString()
                 val password = passwordEditText.text.toString()
 
@@ -67,28 +80,24 @@ class AuthFragment : Fragment() {
                         emailEditText.setText("")
                         passwordEditText.setText("")
 
-                        contextState.saveCurrentUserLocally(it)
-                        navController.navigate(R.id.action_authFragment_to_accountFragment)
+                        contextState.saveCurrentUser(it)
+                        navigationActionToAccount.invoke(null)
                     } else {
                         contextState.toast("Пользователь не найден")
                     }
                     loadingDialog.dismiss()
                 }
             }
-        }
 
-        // TODO: красиво
-        val navigationAction: (View) -> Unit = {
-            navController.navigate(R.id.action_authFragment_to_registerFragment)
-        }
-
-        val registerDescTextView =
-            rootView.findViewById<TextView>(R.id.auth_text_register_desc).apply {
-                setOnClickListener(navigationAction)
+            val navigationAction: (View?) -> Unit = {
+                navController.navigate(R.id.action_authFragment_to_registerFragment)
             }
 
-        val registerTextView = rootView.findViewById<TextView>(R.id.auth_text_register).apply {
-            setOnClickListener(navigationAction)
+            findViewById<TextView>(R.id.auth_text_register_desc)
+                .setOnClickListener(navigationAction)
+
+            findViewById<TextView>(R.id.auth_text_register)
+                .setOnClickListener(navigationAction)
         }
     }
 }

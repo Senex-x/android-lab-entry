@@ -5,13 +5,29 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import java.math.BigInteger
+import java.security.MessageDigest
 
 private val usersRef = FirebaseDatabase.getInstance().getReference("users")
+
+internal fun getUserKey(userEmail: String): String {
+    val md = MessageDigest.getInstance("MD5")
+    return BigInteger(1, md.digest(userEmail.toByteArray()))
+        .toString(16)
+        .padStart(32, '0')
+}
+
+internal fun saveUserImageToCloud(userEmail: String, imageString: String) =
+    with(imageString) {
+        log("Saving user image to database")
+        usersRef.child(getUserKey(userEmail)).child("image").setValue(imageString)
+    }
+
 
 internal fun saveUserToCloud(user: User) =
     with(user) {
         log("Saving user to database")
-        usersRef.child(encodeString(email)).setValue(this)
+        usersRef.child(getUserKey(email)).setValue(this)
     }
 
 internal fun getUserOrNull(email: String, password: String, callback: (User?) -> Unit) =
@@ -20,7 +36,10 @@ internal fun getUserOrNull(email: String, password: String, callback: (User?) ->
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (userSnapshot in dataSnapshot.children) {
                     if (password == userSnapshot.child("password").getValue(String::class.java)) {
-                        log("Got matching user: $userSnapshot")
+                        log(
+                            """Got matching user: 
+                            |$userSnapshot""".trimMargin()
+                        )
                         callback.invoke(
                             User(
                                 email,
@@ -44,14 +63,18 @@ internal fun getUserOrNull(email: String, password: String, callback: (User?) ->
 
 internal fun isEmailPresent(email: String, callback: (Boolean) -> Unit) {
     usersRef.orderByChild("email").equalTo(email)
-        .addListenerForSingleValueEvent(object: ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                log("Found duplicate email for user: $snapshot")
-                callback.invoke(true)
-            }
+        .addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) =
+                callback.invoke(
+                    if (snapshot.value == null) {
+                        false
+                    } else {
+                        log("Found duplicate email for user: $snapshot")
+                        true
+                    }
+                )
 
-            override fun onCancelled(error: DatabaseError) {
+            override fun onCancelled(error: DatabaseError) =
                 callback.invoke(false)
-            }
         })
 }
