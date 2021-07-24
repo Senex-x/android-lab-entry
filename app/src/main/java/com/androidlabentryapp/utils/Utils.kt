@@ -1,7 +1,10 @@
 package com.androidlabentryapp.utils
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import com.androidlabentryapp.models.User
 import com.google.gson.Gson
@@ -53,7 +56,6 @@ internal fun <T> serializeObject(generic: T) =
 internal inline fun <reified T> deserializeObject(serializedSource: String) =
     Gson().fromJson(serializedSource, T::class.java)
 
-
 internal fun isStringPresent(string: String) =
     string.isNotEmpty() && string.isNotBlank()
 
@@ -64,4 +66,11 @@ internal fun isPasswordValid(password: String) =
     password.length > 5 &&
             Pattern.compile(PASSWORD_VALIDATION_REGEX).matcher(password).matches()
 
-
+internal fun Activity.hideKeyboard() =
+    currentFocus?.let {
+        it.clearFocus()
+        (getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager).hideSoftInputFromWindow(
+            it.windowToken,
+            0
+        )
+    }

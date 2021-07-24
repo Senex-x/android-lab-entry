@@ -1,5 +1,6 @@
 package com.androidlabentryapp.views.fragments
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -18,8 +19,10 @@ import com.androidlabentryapp.views.dialogs.LoadingDialogFragment
 class AuthFragment : Fragment() {
     private lateinit var navController: NavController
     private lateinit var contextState: Context
+    private lateinit var activityState: Activity
 
     private val navigationActionToAccount: (View?) -> Unit = {
+        activityState.hideKeyboard()
         navController.navigate(R.id.action_authFragment_to_accountFragment)
     }
 
@@ -28,6 +31,7 @@ class AuthFragment : Fragment() {
 
         navController = this.findNavController()
         contextState = requireContext()
+        activityState = requireActivity()
     }
 
     override fun onCreateView(
