@@ -18,10 +18,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            style="@style/text_style_default"
+            style="@style/text_style_default.with_padding"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ожидание..." />
+            android:text="@string/message_waiting" />
 
         <ProgressBar
             android:id="@+id/progressBar"

@@ -7,7 +7,7 @@
     android:background="@color/primary_background">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
@@ -18,75 +18,49 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            style="@style/card_view_layout_style_default"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:padding="32dp">
+            android:layout_margin="32dp">
 
             <EditText
                 android:id="@+id/auth_edit_text_login"
                 style="@style/edit_text_style_default"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/bar_height_default"
                 android:background="@drawable/rectangle_rounded_outline"
-                android:hint="Введите логин"
+                android:hint="@string/message_enter_login"
                 android:inputType="textEmailAddress"
-                android:textAlignment="center"
-                android:theme="@style/edit_text_theme_default"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:theme="@style/edit_text_theme_default" />
 
             <EditText
                 android:id="@+id/auth_edit_text_password"
-                style="@style/edit_text_style_default"
+                style="@style/edit_text_style_default.with_top_margin"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/bar_height_default"
-                android:layout_marginTop="16dp"
                 android:background="@drawable/rectangle_rounded_outline"
-                android:hint="@string/auth_hint_enter_password"
+                android:hint="@string/message_enter_password"
                 android:inputType="textPassword"
-                android:textAlignment="center"
-                android:theme="@style/edit_text_theme_default"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:theme="@style/edit_text_theme_default" />
 
+            <TextView
+                android:id="@+id/auth_text_register_desc"
+                style="@style/text_style_default.centered"
+                android:layout_marginTop="@dimen/size_double"
+                android:gravity="center_horizontal"
+                android:text="@string/auth_text_no_account_yet" />
 
-                <TextView
-                    android:layout_marginTop="16dp"
-                    android:id="@+id/auth_text_register_desc"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Еще нет аккаунта?"
-                    android:textColor="@color/dark_gray"
-                    android:textSize="@dimen/text_size_default" />
-
-                <TextView
-                    android:id="@+id/auth_text_register"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Зарегестрироваться"
-                    android:textColor="@color/primary"
-                    android:textStyle="italic"
-                    android:textSize="@dimen/text_size_default" />
-
+            <TextView
+                android:id="@+id/auth_text_register"
+                style="@style/text_style_default.centered"
+                android:text="@string/auth_text_register"
+                android:textColor="@color/primary"
+                android:textStyle="italic" />
 
             <Button
                 android:id="@+id/auth_button_enter"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/auth_button_enter"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/auth_edit_text_password" />
-
-
+                android:text="@string/auth_button_enter" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

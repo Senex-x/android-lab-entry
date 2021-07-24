@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="form_item_style_default">
-        <item name="android:textAlignment">center</item>
-        <item name="android:layout_marginTop">16dp</item>
-        <item name="android:layout_height">@dimen/bar_height_default</item>
-        <item name="android:textSize">@dimen/text_size_default</item>
+
+    <style name="edit_text_style_default.with_top_margin">
+        <item name="android:layout_marginTop">@dimen/size_double</item>
     </style>
 
     <style name="edit_text_style_default">
+        <item name="android:importantForAutofill" tools:targetApi="o">no</item>
+        <item name="android:textAlignment">center</item>
         <item name="android:layout_height">@dimen/bar_height_default</item>
         <item name="android:textSize">@dimen/text_size_default</item>
-        <item name="android:autofillHints" tools:targetApi="26">false</item>
     </style>
 
     <style name="edit_text_theme_default">
@@ -18,22 +17,33 @@
     </style>
 
     <style name="text_style_default">
+        <item name="color">@android:color/darker_gray</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:textSize">@dimen/text_size_default</item>
+    </style>
+
+    <style name="text_style_default.with_padding">
         <item name="android:padding">@dimen/size_default</item>
     </style>
 
-    <style name="fragment_homework_element_style">
-        <item name="android:layout_marginBottom">24dp</item>
+    <style name="text_style_default.with_top_margin">
+        <item name="android:layout_marginTop">@dimen/size_double</item>
     </style>
 
-    <style name="fragment_student_info_element_style">
-        <item name="android:layout_marginBottom">12dp</item>
+    <style name="text_style_default.centered">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:gravity">center_horizontal</item>
     </style>
 
     <style name="card_view_style_default">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_margin">8dp</item>
+        <item name="android:layout_margin">@dimen/size_default</item>
+    </style>
+
+    <style name="card_view_layout_style_default">
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_margin">@dimen/size_default</item>
     </style>
 
     <style name="text_style_header">

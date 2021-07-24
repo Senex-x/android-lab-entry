@@ -72,7 +72,7 @@ class RegisterFragment : Fragment() {
                 val loadingDialog = LoadingDialogFragment()
                 loadingDialog.show(
                     requireActivity().supportFragmentManager,
-                    "loadingDialog"
+                    getString(R.string.tag_loading_dialog)
                 )
 
                 val name = nameEditText.text.toString()
@@ -82,20 +82,20 @@ class RegisterFragment : Fragment() {
                 val confirmPassword = confirmPasswordEditText.text.toString()
 
                 if (!isStringPresent(name) || name.length < 2) {
-                    contextState.toast("Введите имя")
+                    contextState.toast(getString(R.string.register_message_enter_name))
                     loadingDialog.dismiss()
                     return@setOnClickListener
                 }
 
                 if (!isStringPresent(surname) || surname.length < 2) {
                     loadingDialog.dismiss()
-                    contextState.toast("Введите фамилию")
+                    contextState.toast(getString(R.string.register_message_enter_surname))
                     return@setOnClickListener
                 }
 
                 if (!isEmailValid(email)) {
                     loadingDialog.dismiss()
-                    contextState.toast("Недопустимый почтовый адрес")
+                    contextState.toast(getString(R.string.error_unacceptable_email))
                     return@setOnClickListener
                 }
 
@@ -103,7 +103,7 @@ class RegisterFragment : Fragment() {
                     passwordEditText.setText("")
                     confirmPasswordEditText.setText("")
                     loadingDialog.dismiss()
-                    contextState.toast("Недопустимый пароль")
+                    contextState.toast(getString(R.string.error_unacceptable_password))
                     return@setOnClickListener
                 }
 
@@ -111,7 +111,7 @@ class RegisterFragment : Fragment() {
                     passwordEditText.setText("")
                     confirmPasswordEditText.setText("")
                     loadingDialog.dismiss()
-                    contextState.toast("Пароли не совпадают")
+                    contextState.toast(getString(R.string.error_password_mismatch))
                     return@setOnClickListener
                 }
 
@@ -119,7 +119,7 @@ class RegisterFragment : Fragment() {
                 isEmailPresent(email) { isPresent ->
                     loadingDialog.dismiss()
                     if (isPresent) {
-                        contextState.toast("Почтовый адрес занят")
+                        contextState.toast(getString(R.string.error_email_taken))
                     } else {
                         val newUser = User(
                             email,

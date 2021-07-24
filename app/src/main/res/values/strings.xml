@@ -1,5 +1,26 @@
 <resources>
     <string name="app_name">EntryApp</string>
     <string name="auth_button_enter">Войти</string>
-    <string name="auth_hint_enter_password">Введите пароль</string>
+    <string name="message_enter_password">Введите пароль</string>
+    <string name="message_waiting">Ожидание...</string>
+    <string name="title_upload_photo">Загрузить фото</string>
+    <string name="account_title_login">Логин:</string>
+    <string name="title_out">Выйти</string>
+    <string name="message_enter_login">Введите логин</string>
+    <string name="auth_text_no_account_yet">Еще нет аккаунта?</string>
+    <string name="auth_text_register">Зарегестрироваться</string>
+    <string name="register_message_enter_email">Введите почту</string>
+    <string name="register_message_enter_surname">Введите фамилию</string>
+    <string name="register_message_enter_name">Введите имя</string>
+    <string name="register_text_password_input_description">Пароль должен состоять из букв латинского алфавита и содержать минимум одну цифру, одну строчную и заглавную буквы.</string>
+    <string name="register_message_confirm_password">Подтвердите пароль</string>
+    <string name="register_text_have_account">Уже есть аккаунт?</string>
+    <string name="register_text_enter">Войти</string>
+    <string name="register_title_register">Зарегестрироваться</string>
+    <string name="error_unacceptable_email">Недопустимый почтовый адрес</string>
+    <string name="error_unacceptable_password">Недопустимый пароль</string>
+    <string name="error_password_mismatch">Пароли не совпадают</string>
+    <string name="error_email_taken">Почтовый адрес занят</string>
+    <string name="tag_loading_dialog">loadingDialog</string>
+    <string name="error_user_not_found">Пользователь не найден</string>
 </resources>

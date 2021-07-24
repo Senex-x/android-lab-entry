@@ -8,7 +8,6 @@
 
     <androidx.cardview.widget.CardView
         style="@style/card_view_style_default"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@+id/account_card_view_footer"
@@ -17,10 +16,9 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <LinearLayout
+            style="@style/card_view_layout_style_default"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/account_image_photo"
@@ -29,10 +27,7 @@
                 android:background="@color/primary"
                 android:src="@drawable/ic_launcher_foreground"
                 app:civ_border_color="@color/primary"
-                app:civ_border_width="2dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:civ_border_width="2dp" />
 
             <Button
                 android:id="@+id/account_button_upload_photo"
@@ -40,43 +35,34 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
-                android:text="Загрузить фото"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/auth_edit_text_password" />
+                android:text="@string/title_upload_photo" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:divider="@drawable/line_divider"
+                android:orientation="vertical"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
                 android:showDividers="beginning">
 
                 <TextView
-                    android:layout_marginTop="8dp"
-                    android:textColor="@color/primary"
                     android:id="@+id/account_text_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="16dp"
-                    android:text="Name field"
+                    style="@style/text_style_default.centered"
+                    android:layout_marginTop="8dp"
+                    android:text="Name field placeholder"
+                    android:textColor="@color/primary"
                     android:textSize="20sp" />
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Логин:" />
+                    style="@style/text_style_default.centered"
+                    android:text="@string/account_title_login" />
 
                 <TextView
-                    android:textColor="@color/black"
                     android:id="@+id/account_text_email"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Email field"
-                    android:textSize="16sp" />
+                    style="@style/text_style_default.centered"
+                    android:text="Email field placeholder"
+                    android:textColor="@color/black" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
@@ -84,8 +70,6 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/account_card_view_footer"
         style="@style/card_view_style_default"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -96,7 +80,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="8dp"
-            android:text="Выйти"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            android:text="@string/title_out" />
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

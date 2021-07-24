@@ -41,7 +41,7 @@ class AuthFragment : Fragment() {
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_auth, container, false)
 
-        if(contextState.isCurrentUserPresent()) {
+        if (contextState.isCurrentUserPresent()) {
             navigationActionToAccount.invoke(null)
         }
 
@@ -61,18 +61,21 @@ class AuthFragment : Fragment() {
                 val password = passwordEditText.text.toString()
 
                 if (!isEmailValid(email)) {
-                    contextState.toast("Логин указан неверно")
+                    contextState.toast(getString(R.string.error_unacceptable_email))
                     return@setOnClickListener
                 }
 
                 if (!isPasswordValid(password)) {
-                    contextState.toast("Пароль указан неверно")
+                    contextState.toast(getString(R.string.error_unacceptable_password))
                     passwordEditText.setText("")
                     return@setOnClickListener
                 }
 
                 val loadingDialog = LoadingDialogFragment()
-                loadingDialog.show(requireActivity().supportFragmentManager, "loadingDialog")
+                loadingDialog.show(
+                    requireActivity().supportFragmentManager,
+                    getString(R.string.tag_loading_dialog)
+                )
 
                 getUserOrNull(email, password) {
                     if (it != null) {
@@ -82,7 +85,7 @@ class AuthFragment : Fragment() {
                         contextState.saveCurrentUser(it)
                         navigationActionToAccount.invoke(null)
                     } else {
-                        contextState.toast("Пользователь не найден")
+                        contextState.toast(getString(R.string.error_user_not_found))
                     }
                     loadingDialog.dismiss()
                 }

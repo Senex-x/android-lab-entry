@@ -6,5 +6,6 @@
     <dimen name="size_4">4dp</dimen>
     <dimen name="size_default">8dp</dimen>
     <dimen name="size_10">10dp</dimen>
+    <dimen name="size_double">16dp</dimen>
     <dimen name="icon_size_default">28dp</dimen>
 </resources>

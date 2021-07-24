@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         style="@style/card_view_style_default"
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@+id/register_card_view_footer"
@@ -22,11 +22,9 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                style="@style/card_view_layout_style_default"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                android:padding="8dp">
+                android:layout_height="wrap_content">
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/register_image_view_photo"
@@ -35,95 +33,66 @@
                     android:background="@color/primary"
                     android:src="@drawable/ic_launcher_foreground"
                     app:civ_border_color="@color/primary"
-                    app:civ_border_width="2dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    app:civ_border_width="2dp" />
 
                 <Button
                     android:id="@+id/register_button_upload_photo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:text="Загрузить фото"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/auth_edit_text_password" />
+                    android:text="@string/title_upload_photo" />
 
                 <EditText
                     android:id="@+id/register_edit_text_name"
-                    style="@style/form_item_style_default"
+                    style="@style/edit_text_style_default.with_top_margin"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/bar_height_default"
                     android:background="@drawable/rectangle_rounded_outline"
-                    android:hint="Введите имя"
+                    android:hint="@string/register_message_enter_name"
                     android:inputType="text"
-                    android:theme="@style/edit_text_theme_default"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:theme="@style/edit_text_theme_default" />
 
                 <EditText
                     android:id="@+id/register_edit_text_surname"
-                    style="@style/form_item_style_default"
+                    style="@style/edit_text_style_default.with_top_margin"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/bar_height_default"
                     android:background="@drawable/rectangle_rounded_outline"
-                    android:hint="Введите фамилию"
+                    android:hint="@string/register_message_enter_surname"
                     android:inputType="text"
-                    android:theme="@style/edit_text_theme_default"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:theme="@style/edit_text_theme_default" />
 
                 <EditText
                     android:id="@+id/register_edit_text_login"
-                    style="@style/form_item_style_default"
+                    style="@style/edit_text_style_default.with_top_margin"
                     android:layout_width="match_parent"
                     android:background="@drawable/rectangle_rounded_outline"
-                    android:hint="Введите почту"
+                    android:hint="@string/register_message_enter_email"
                     android:inputType="textEmailAddress"
-                    android:theme="@style/edit_text_theme_default"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:theme="@style/edit_text_theme_default" />
 
                 <TextView
+                    style="@style/text_style_default.centered"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="16dp"
-                    android:gravity="center_horizontal"
-                    android:text="Пароль должен состоять из букв латинского алфавита и содержать минимум одну цифру, одну строчную и заглавную буквы."
-                    android:textColor="@color/dark_gray" />
+                    android:text="@string/register_text_password_input_description" />
 
                 <EditText
                     android:id="@+id/register_edit_text_password"
-                    style="@style/form_item_style_default"
+                    style="@style/edit_text_style_default.with_top_margin"
                     android:layout_width="match_parent"
                     android:background="@drawable/rectangle_rounded_outline"
-                    android:hint="@string/auth_hint_enter_password"
+                    android:hint="@string/message_enter_password"
                     android:inputType="textPassword"
-                    android:theme="@style/edit_text_theme_default"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:theme="@style/edit_text_theme_default" />
 
                 <EditText
                     android:id="@+id/register_edit_text_password_confirm"
-                    style="@style/form_item_style_default"
+                    style="@style/edit_text_style_default.with_top_margin"
                     android:layout_width="match_parent"
                     android:background="@drawable/rectangle_rounded_outline"
-                    android:hint="Подтвердите пароль"
+                    android:hint="@string/register_message_confirm_password"
                     android:inputType="textPassword"
-                    android:theme="@style/edit_text_theme_default"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    android:theme="@style/edit_text_theme_default" />
 
             </LinearLayout>
         </ScrollView>
@@ -140,13 +109,11 @@
         app:layout_constraintStart_toStartOf="parent">
 
         <LinearLayout
-            android:padding="8dp"
+            style="@style/card_view_layout_style_default"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="wrap_content">
 
             <LinearLayout
-                android:paddingBottom="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -158,29 +125,25 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="8dp"
                     android:gravity="center"
-                    android:text="Уже есть аккаунт?"
-                    android:textColor="@color/dark_gray"
+                    android:text="@string/register_text_have_account"
+                    android:textColor="@color/gray_dark"
                     android:textSize="@dimen/text_size_default" />
 
                 <TextView
                     android:id="@+id/register_text_enter"
+                    style="@style/text_style_default"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="Войти"
+                    android:text="@string/register_text_enter"
                     android:textColor="@color/primary"
-                    android:textSize="@dimen/text_size_default"
                     android:textStyle="italic" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/register_button_register"
+                style="@style/text_style_default"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Зарегестрироваться"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/auth_edit_text_password" />
+                android:layout_marginTop="8dp"
+                android:text="@string/register_title_register" />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
