@@ -1,3 +1,12 @@
+# Extra info
+I have started to make android apps about two years ago. 
+Also i know core of Java and Kotlin languages. 
+
+### Interesting apps:
+* Almost fully made by me - [App for Ferenetz practice](https://github.com/Senex-x/TextBuilder-app)
+* With significant contribution - [App for SimbirSoft's summer practice](https://github.com/Senex-x/tutors_notebook)
+* Made by me, like a year ago - [Old chat app](https://github.com/Senex-x/TextMe)
+
 # Android Entry App
 
 ## Log in screen
