@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         style="@style/card_view_style_default"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="wrap_content"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toTopOf="@+id/account_card_view_footer"
         app:layout_constraintEnd_toEndOf="parent"
@@ -22,38 +22,62 @@
             android:layout_margin="8dp"
             android:orientation="vertical">
 
-
-            <ImageView
+            <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/account_image_photo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/primary"
+                android:src="@drawable/ic_launcher_foreground"
+                app:civ_border_color="@color/primary"
+                app:civ_border_width="2dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_launcher_foreground" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/account_button_upload_photo"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:text="Загрузить фото"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/auth_edit_text_password" />
 
-            <TextView
-                android:id="@+id/account_text_name"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Name" />
+                android:divider="@drawable/line_divider"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:showDividers="beginning">
 
-            <TextView
-                android:id="@+id/account_text_email"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Email" />
+                <TextView
+                    android:layout_marginTop="8dp"
+                    android:textColor="@color/primary"
+                    android:id="@+id/account_text_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    android:text="Name field"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Логин:" />
+
+                <TextView
+                    android:textColor="@color/black"
+                    android:id="@+id/account_text_email"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Email field"
+                    android:textSize="16sp" />
+            </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
@@ -69,9 +93,9 @@
 
         <Button
             android:id="@+id/account_button_log_out"
-            android:layout_margin="8dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:text="Выйти"
             app:layout_constraintBottom_toBottomOf="parent" />
     </androidx.cardview.widget.CardView>

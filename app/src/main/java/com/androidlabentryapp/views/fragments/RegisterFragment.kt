@@ -81,17 +81,20 @@ class RegisterFragment : Fragment() {
                 val password = passwordEditText.text.toString()
                 val confirmPassword = confirmPasswordEditText.text.toString()
 
-                if (!isStringPresent(name) && name.length > 1) {
+                if (!isStringPresent(name) || name.length < 2) {
                     contextState.toast("Введите имя")
+                    loadingDialog.dismiss()
                     return@setOnClickListener
                 }
 
-                if (!isStringPresent(surname) && surname.length > 1) {
+                if (!isStringPresent(surname) || surname.length < 2) {
+                    loadingDialog.dismiss()
                     contextState.toast("Введите фамилию")
                     return@setOnClickListener
                 }
 
                 if (!isEmailValid(email)) {
+                    loadingDialog.dismiss()
                     contextState.toast("Недопустимый почтовый адрес")
                     return@setOnClickListener
                 }
@@ -99,6 +102,7 @@ class RegisterFragment : Fragment() {
                 if (!isPasswordValid(password)) {
                     passwordEditText.setText("")
                     confirmPasswordEditText.setText("")
+                    loadingDialog.dismiss()
                     contextState.toast("Недопустимый пароль")
                     return@setOnClickListener
                 }
@@ -106,6 +110,7 @@ class RegisterFragment : Fragment() {
                 if (password != confirmPassword) {
                     passwordEditText.setText("")
                     confirmPasswordEditText.setText("")
+                    loadingDialog.dismiss()
                     contextState.toast("Пароли не совпадают")
                     return@setOnClickListener
                 }
