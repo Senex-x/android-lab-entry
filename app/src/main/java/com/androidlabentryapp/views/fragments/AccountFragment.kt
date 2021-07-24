@@ -3,7 +3,6 @@ package com.androidlabentryapp.views.fragments
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,14 +16,6 @@ import androidx.navigation.fragment.findNavController
 import com.androidlabentryapp.R
 import com.androidlabentryapp.models.User
 import com.androidlabentryapp.utils.*
-import com.androidlabentryapp.utils.bitmapToString
-import com.androidlabentryapp.utils.compressBitmap
-import com.androidlabentryapp.utils.cutBitmapToSquare
-import com.androidlabentryapp.utils.deleteCurrentUser
-import com.androidlabentryapp.utils.getBitmapByUri
-import com.androidlabentryapp.utils.getCurrentUser
-import com.androidlabentryapp.utils.handleBitmapCutAndSampling
-import com.androidlabentryapp.utils.stringToBitmap
 
 class AccountFragment : Fragment() {
     private val pickPhotoCode = 0xaaa
@@ -73,13 +64,13 @@ class AccountFragment : Fragment() {
                 )
             }
 
-            val nameTextView = findViewById<TextView>(R.id.account_text_name).apply {
-                text = currentUser.name + " " + currentUser.surname
-            }
+            findViewById<TextView>(R.id.account_text_name).text =
+                currentUser.name + " " + currentUser.surname
 
-            val emailTextView = findViewById<TextView>(R.id.account_text_email).apply {
-                text = currentUser.email
-            }
+
+            findViewById<TextView>(R.id.account_text_email).text =
+                currentUser.email
+
 
             findViewById<Button>(R.id.account_button_log_out).setOnClickListener {
                 contextState.deleteCurrentUser()
@@ -96,10 +87,20 @@ class AccountFragment : Fragment() {
 
                 with(photoImageView) {
                     setImageBitmap(bitmap)
-                    setBackgroundColor(resources.getColor(com.androidlabentryapp.R.color.white))
+                    setBackgroundColor(resources.getColor(R.color.white))
                 }
 
-                saveUserImageToCloud(currentUser.email, bitmapToString(compressBitmap(bitmap, 30)))
+                val imageString = bitmapToString(compressBitmap(bitmap, 30))
+                saveUserImageToCloud(currentUser.email, imageString)
+
+                currentUser = User(
+                    currentUser.email,
+                    currentUser.password,
+                    currentUser.name,
+                    currentUser.surname,
+                    imageString
+                )
+                contextState.saveCurrentUser(currentUser)
             }
         }
     }

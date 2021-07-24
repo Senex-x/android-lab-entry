@@ -23,18 +23,14 @@ internal fun log(message: String?) =
 
 internal const val CURRENT_USER_FILE_NAME = "current-user.txt"
 
-internal fun Context.saveTextToFile(fileName: String, text: String) =
-    openFileOutput(fileName, Context.MODE_PRIVATE).use {
-        it.write(text.toByteArray())
-    }
-
-internal fun Context.getTextFromFile(fileName: String) =
-    buildString {
-        openFileInput(fileName).bufferedReader().useLines {
-            it.forEach { string ->
-                append(string).append("\n")
-            }
-        }
+internal fun Context.isCurrentUserPresent() =
+    try {
+        getTextFromFile(CURRENT_USER_FILE_NAME)
+        log("Local user found")
+        true
+    } catch (e: Exception) {
+        log("Local user not found")
+        false
     }
 
 internal fun Context.getCurrentUser() =
@@ -50,13 +46,13 @@ internal fun Context.deleteCurrentUser() =
     deleteFileWithLogging(CURRENT_USER_FILE_NAME)
 
 
-internal fun <T> serializeObject(generic: T): String {
-    return Gson().toJson(generic)
-}
+internal fun <T> serializeObject(generic: T) =
+    Gson().toJson(generic)
 
-internal inline fun <reified T> deserializeObject(serializedSource: String): T {
-    return Gson().fromJson(serializedSource, T::class.java)
-}
+
+internal inline fun <reified T> deserializeObject(serializedSource: String) =
+    Gson().fromJson(serializedSource, T::class.java)
+
 
 internal fun isStringPresent(string: String) =
     string.isNotEmpty() && string.isNotBlank()

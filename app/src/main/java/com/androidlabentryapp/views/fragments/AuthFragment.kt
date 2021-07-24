@@ -23,20 +23,11 @@ class AuthFragment : Fragment() {
         navController.navigate(R.id.action_authFragment_to_accountFragment)
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         navController = this.findNavController()
         contextState = requireContext()
-
-        try {
-            contextState.getTextFromFile(CURRENT_USER_FILE_NAME)
-            log("Local user found")
-            navigationActionToAccount.invoke(null)
-        } catch (e: Exception) {
-            log("Local user not found")
-        }
     }
 
     override fun onCreateView(
@@ -45,6 +36,10 @@ class AuthFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         val rootView = inflater.inflate(R.layout.fragment_auth, container, false)
+
+        if(contextState.isCurrentUserPresent()) {
+            navigationActionToAccount.invoke(null)
+        }
 
         initUi(rootView)
 
