@@ -10,8 +10,8 @@
     <string name="auth_text_no_account_yet">Еще нет аккаунта?</string>
     <string name="auth_text_register">Зарегестрироваться</string>
     <string name="register_message_enter_email">Введите почту</string>
-    <string name="register_message_enter_surname">Введите фамилию</string>
-    <string name="register_message_enter_name">Введите имя</string>
+    <string name="message_enter_surname">Введите фамилию</string>
+    <string name="message_enter_name">Введите имя</string>
     <string name="register_text_password_input_description">Пароль должен состоять из букв латинского алфавита и содержать минимум одну цифру, одну строчную и заглавную буквы.</string>
     <string name="register_message_confirm_password">Подтвердите пароль</string>
     <string name="register_text_have_account">Уже есть аккаунт?</string>
@@ -23,4 +23,5 @@
     <string name="error_email_taken">Почтовый адрес занят</string>
     <string name="tag_loading_dialog">loadingDialog</string>
     <string name="error_user_not_found">Пользователь не найден</string>
+    <string name="message_success">Успешно</string>
 </resources>

@@ -67,10 +67,8 @@ class AccountFragment : Fragment() {
             findViewById<TextView>(R.id.account_text_name).text =
                 currentUser.name + " " + currentUser.surname
 
-
             findViewById<TextView>(R.id.account_text_email).text =
                 currentUser.email
-
 
             findViewById<Button>(R.id.account_button_log_out).setOnClickListener {
                 contextState.deleteCurrentUser()

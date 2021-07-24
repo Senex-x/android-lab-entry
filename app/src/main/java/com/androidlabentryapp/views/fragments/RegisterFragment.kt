@@ -3,12 +3,14 @@ package com.androidlabentryapp.views.fragments
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -69,11 +71,6 @@ class RegisterFragment : Fragment() {
                 findViewById<EditText>(R.id.register_edit_text_password_confirm)
 
             findViewById<Button>(R.id.register_button_register).setOnClickListener {
-                val loadingDialog = LoadingDialogFragment()
-                loadingDialog.show(
-                    requireActivity().supportFragmentManager,
-                    getString(R.string.tag_loading_dialog)
-                )
 
                 val name = nameEditText.text.toString()
                 val surname = surnameEditText.text.toString()
@@ -81,60 +78,57 @@ class RegisterFragment : Fragment() {
                 val password = passwordEditText.text.toString()
                 val confirmPassword = confirmPasswordEditText.text.toString()
 
-                if (!isStringPresent(name) || name.length < 2) {
-                    contextState.toast(getString(R.string.register_message_enter_name))
-                    loadingDialog.dismiss()
-                    return@setOnClickListener
-                }
+                contextState.toast(
+                    when (false) {
+                        isStringPresent(name) || name.length > 1 -> {
+                            getString(R.string.message_enter_name)
+                        }
+                        isStringPresent(surname) || surname.length > 1 -> {
+                            getString(R.string.message_enter_surname)
+                        }
+                        isEmailValid(email) -> {
+                            getString(R.string.error_unacceptable_email)
+                        }
+                        isPasswordValid(password) -> {
+                            passwordEditText.setText("")
+                            confirmPasswordEditText.setText("")
+                            getString(R.string.error_unacceptable_password)
+                        }
+                        password == confirmPassword -> {
+                            passwordEditText.setText("")
+                            confirmPasswordEditText.setText("")
+                            getString(R.string.error_password_mismatch)
+                        }
+                        else -> {
+                            val loadingDialog = LoadingDialogFragment()
+                            loadingDialog.show(
+                                requireActivity().supportFragmentManager,
+                                getString(R.string.tag_loading_dialog)
+                            )
 
-                if (!isStringPresent(surname) || surname.length < 2) {
-                    loadingDialog.dismiss()
-                    contextState.toast(getString(R.string.register_message_enter_surname))
-                    return@setOnClickListener
-                }
+                            isEmailPresent(email) { isPresent ->
+                                loadingDialog.dismiss()
+                                if (isPresent) {
+                                    log("Email taken already")
+                                    contextState.toast(getString(R.string.error_email_taken))
+                                } else {
+                                    val newUser = User(
+                                        email,
+                                        password,
+                                        name[0].uppercaseChar() + name.substring(1),
+                                        surname[0].uppercaseChar() + surname.substring(1),
+                                        uploadedImageString ?: ""
+                                    )
 
-                if (!isEmailValid(email)) {
-                    loadingDialog.dismiss()
-                    contextState.toast(getString(R.string.error_unacceptable_email))
-                    return@setOnClickListener
-                }
+                                    saveUserToCloud(newUser)
+                                    contextState.saveCurrentUser(newUser)
 
-                if (!isPasswordValid(password)) {
-                    passwordEditText.setText("")
-                    confirmPasswordEditText.setText("")
-                    loadingDialog.dismiss()
-                    contextState.toast(getString(R.string.error_unacceptable_password))
-                    return@setOnClickListener
-                }
-
-                if (password != confirmPassword) {
-                    passwordEditText.setText("")
-                    confirmPasswordEditText.setText("")
-                    loadingDialog.dismiss()
-                    contextState.toast(getString(R.string.error_password_mismatch))
-                    return@setOnClickListener
-                }
-
-                log("Checking email")
-                isEmailPresent(email) { isPresent ->
-                    loadingDialog.dismiss()
-                    if (isPresent) {
-                        contextState.toast(getString(R.string.error_email_taken))
-                    } else {
-                        val newUser = User(
-                            email,
-                            password,
-                            name[0].uppercaseChar() + name.substring(1),
-                            surname[0].uppercaseChar() + surname.substring(1),
-                            uploadedImageString ?: ""
-                        )
-
-                        saveUserToCloud(newUser)
-                        contextState.saveCurrentUser(newUser)
-
-                        navController.navigate(R.id.action_registerFragment_to_accountFragment)
-                    }
-                }
+                                    navController.navigate(R.id.action_registerFragment_to_accountFragment)
+                                }
+                            }
+                            null
+                        }
+                    })
             }
 
             val navigationAction: (View) -> Unit = {

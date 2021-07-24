@@ -60,35 +60,37 @@ class AuthFragment : Fragment() {
                 val email = emailEditText.text.toString()
                 val password = passwordEditText.text.toString()
 
-                if (!isEmailValid(email)) {
-                    contextState.toast(getString(R.string.error_unacceptable_email))
-                    return@setOnClickListener
-                }
+                contextState.toast(
+                    when (false) {
+                        isEmailValid(email) -> {
+                            getString(R.string.error_unacceptable_email)
+                        }
+                        isPasswordValid(password) -> {
+                            passwordEditText.setText("")
+                            getString(R.string.error_unacceptable_password)
+                        }
+                        else -> {
+                            val loadingDialog = LoadingDialogFragment()
+                            loadingDialog.show(
+                                requireActivity().supportFragmentManager,
+                                getString(R.string.tag_loading_dialog)
+                            )
 
-                if (!isPasswordValid(password)) {
-                    contextState.toast(getString(R.string.error_unacceptable_password))
-                    passwordEditText.setText("")
-                    return@setOnClickListener
-                }
+                            getUserOrNull(email, password) {
+                                if (it != null) {
+                                    emailEditText.setText("")
+                                    passwordEditText.setText("")
 
-                val loadingDialog = LoadingDialogFragment()
-                loadingDialog.show(
-                    requireActivity().supportFragmentManager,
-                    getString(R.string.tag_loading_dialog)
-                )
-
-                getUserOrNull(email, password) {
-                    if (it != null) {
-                        emailEditText.setText("")
-                        passwordEditText.setText("")
-
-                        contextState.saveCurrentUser(it)
-                        navigationActionToAccount.invoke(null)
-                    } else {
-                        contextState.toast(getString(R.string.error_user_not_found))
-                    }
-                    loadingDialog.dismiss()
-                }
+                                    contextState.saveCurrentUser(it)
+                                    navigationActionToAccount.invoke(null)
+                                } else {
+                                    contextState.toast(getString(R.string.error_user_not_found))
+                                }
+                                loadingDialog.dismiss()
+                            }
+                            null
+                        }
+                    })
             }
 
             val navigationAction: (View?) -> Unit = {

@@ -55,6 +55,7 @@
                     android:textSize="20sp" />
 
                 <TextView
+                    android:layout_marginTop="@dimen/size_default"
                     style="@style/text_style_default.centered"
                     android:text="@string/account_title_login" />
 
