@@ -1,16 +1,13 @@
 package com.androidlabentryapp.views.fragments
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
@@ -21,8 +18,6 @@ import com.androidlabentryapp.utils.*
 import com.androidlabentryapp.views.dialogs.LoadingDialogFragment
 
 class RegisterFragment : Fragment() {
-    private val pickPhotoCode = 0xfff
-
     private lateinit var navController: NavController
     private lateinit var contextState: Context
 
@@ -33,13 +28,17 @@ class RegisterFragment : Fragment() {
     private val binding
         get() = _binding!!
 
+    private val getContentActivityLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent(),
+        handleChosenUri()
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         navController = findNavController()
         contextState = requireContext()
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -59,27 +58,17 @@ class RegisterFragment : Fragment() {
         photoImageView = registerImageViewPhoto
 
         registerButtonUploadPhoto.setOnClickListener {
-            startActivityForResult(
-                Intent(Intent.ACTION_PICK).apply {
-                    type = "image/*"
-                }, pickPhotoCode
-            )
+            getContentActivityLauncher.launch("image/*")
         }
-
-        val nameEditText = registerEditTextName
-        val surnameEditText = registerEditTextSurname
-        val emailEditText = registerEditTextLogin
-        val passwordEditText = registerEditTextPassword
-        val confirmPasswordEditText = registerEditTextPasswordConfirm
 
         registerButtonRegister.setOnClickListener {
             val (name, surname, email, password, confirmPassword) =
                 getTextFrom(
-                    nameEditText,
-                    surnameEditText,
-                    emailEditText,
-                    passwordEditText,
-                    confirmPasswordEditText
+                    registerEditTextName,
+                    registerEditTextSurname,
+                    registerEditTextLogin,
+                    registerEditTextPassword,
+                    registerEditTextPasswordConfirm
                 )
 
             when (false) {
@@ -94,15 +83,15 @@ class RegisterFragment : Fragment() {
                 }
                 isPasswordValid(password) -> {
                     clearTextFor(
-                        passwordEditText,
-                        confirmPasswordEditText
+                        registerEditTextPassword,
+                        registerEditTextPasswordConfirm
                     )
                     getString(R.string.error_unacceptable_password)
                 }
                 password == confirmPassword -> {
                     clearTextFor(
-                        passwordEditText,
-                        confirmPasswordEditText
+                        registerEditTextPassword,
+                        registerEditTextPasswordConfirm
                     )
                     getString(R.string.error_password_mismatch)
                 }
@@ -149,24 +138,20 @@ class RegisterFragment : Fragment() {
         registerTextEnter.setOnClickListener(navigationAction)
 
         registerTextEnterDesc.setOnClickListener(navigationAction)
-
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode != pickPhotoCode || resultCode != Activity.RESULT_OK || data == null || data.data == null) {
-            contextState.toast(getString(R.string.error_fail))
-            return
+    private fun handleChosenUri(): (Uri?) -> Unit = handler@{
+        if(it == null) {
+            contextState.toast(getString(R.string.error_photo_not_picked))
+            return@handler
         }
+        val bitmap = contextState.handleBitmap(imageUri = it)
 
-        val bitmap = contextState.handleBitmap(imageUri = data.data!!)
-
-        uploadedImageString = bitmap.compress(30).convertToString()
+        uploadedImageString = bitmap.compress(quality = 30).convertToString()
 
         photoImageView.run {
             setImageBitmap(bitmap)
             setBackgroundColor(resources.getColor(R.color.white))
         }
-
     }
 }

@@ -6,15 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.androidlabentryapp.R
 import com.androidlabentryapp.databinding.FragmentAuthBinding
-import com.androidlabentryapp.databinding.FragmentRegisterBinding
 import com.androidlabentryapp.utils.*
 import com.androidlabentryapp.views.dialogs.LoadingDialogFragment
 
@@ -28,7 +24,6 @@ class AuthFragment : Fragment() {
         get() = _binding!!
 
     private val navigationActionToAccount = { _: View? ->
-        activityState.hideKeyboard()
         navController.navigate(R.id.action_authFragment_to_accountFragment)
     }
 
@@ -61,6 +56,8 @@ class AuthFragment : Fragment() {
         val passwordEditText = authEditTextPassword
 
         authButtonEnter.setOnClickListener {
+            activityState.hideKeyboard()
+
             val (email, password) = getTextFrom(
                 emailEditText, passwordEditText
             )
@@ -74,12 +71,11 @@ class AuthFragment : Fragment() {
                     getString(R.string.error_unacceptable_password)
                 }
                 else -> {
-                    val loadingDialog = LoadingDialogFragment().apply {
-                        show(
-                            requireActivity().supportFragmentManager,
-                            getString(R.string.tag_loading_dialog)
-                        )
-                    }
+                    val loadingDialog = LoadingDialogFragment()
+                    loadingDialog.show(
+                        requireActivity().supportFragmentManager,
+                        getString(R.string.tag_loading_dialog)
+                    )
 
                     getUserOrNull(email, password) {
                         this?.run {

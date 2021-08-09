@@ -1,29 +1,23 @@
 package com.androidlabentryapp.views.fragments
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.androidlabentryapp.R
 import com.androidlabentryapp.databinding.FragmentAccountBinding
-import com.androidlabentryapp.databinding.FragmentAuthBinding
-import com.androidlabentryapp.databinding.FragmentRegisterBinding
 import com.androidlabentryapp.models.User
 import com.androidlabentryapp.utils.*
 
 class AccountFragment : Fragment() {
-    private val pickPhotoCode = 0xaaa
-
     private lateinit var navController: NavController
     private lateinit var contextState: Context
     private lateinit var currentUser: User
@@ -33,6 +27,11 @@ class AccountFragment : Fragment() {
     private var _binding: FragmentAccountBinding? = null
     private val binding
         get() = _binding!!
+
+    private val getContentActivityLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent(),
+        handleChosenUri()
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,11 +61,7 @@ class AccountFragment : Fragment() {
         }
 
         accountButtonUploadPhoto.setOnClickListener {
-            startActivityForResult(
-                Intent(Intent.ACTION_PICK).apply {
-                    type = "image/*"
-                }, pickPhotoCode
-            )
+            getContentActivityLauncher.launch("image/*")
         }
 
         accountTextName.text =
@@ -81,22 +76,25 @@ class AccountFragment : Fragment() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 
-        if (requestCode != pickPhotoCode || resultCode != Activity.RESULT_OK || data == null || data.data == null) {
-            contextState.toast(getString(R.string.error_fail))
-            return
+    private fun handleChosenUri(): (Uri?) -> Unit = handler@{
+        if (it == null) {
+            contextState.toast(getString(R.string.error_photo_not_picked))
+            return@handler
         }
 
-        val bitmap = contextState.handleBitmap(imageUri = data.data!!)
+        val bitmap = contextState.handleBitmap(imageUri = it)
 
         photoImageView.run {
             setImageBitmap(bitmap)
             setBackgroundColor(resources.getColor(R.color.white))
         }
 
-        val imageString = bitmap.compress(30).convertToString()
+        val imageString = bitmap.compress(quality = 30).convertToString()
 
         currentUser = currentUser.run {
             User(
@@ -110,10 +108,6 @@ class AccountFragment : Fragment() {
                 saveToLocal(contextState)
             }
         }
-    }
 
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
     }
 }
