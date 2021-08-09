@@ -71,64 +71,69 @@ class RegisterFragment : Fragment() {
                 findViewById<EditText>(R.id.register_edit_text_password_confirm)
 
             findViewById<Button>(R.id.register_button_register).setOnClickListener {
+                val (name, surname, email, password, confirmPassword) =
+                    getTextFrom(
+                        nameEditText,
+                        surnameEditText,
+                        emailEditText,
+                        passwordEditText,
+                        confirmPasswordEditText
+                    )
 
-                val name = nameEditText.text.toString()
-                val surname = surnameEditText.text.toString()
-                val email = emailEditText.text.toString()
-                val password = passwordEditText.text.toString()
-                val confirmPassword = confirmPasswordEditText.text.toString()
+                when (false) {
+                    name.isValidString(minLength = 2) -> {
+                        getString(R.string.message_enter_name)
+                    }
+                    surname.isValidString(minLength = 2) -> {
+                        getString(R.string.message_enter_surname)
+                    }
+                    isEmailValid(email) -> {
+                        getString(R.string.error_unacceptable_email)
+                    }
+                    isPasswordValid(password) -> {
+                        clearTextFor(
+                            passwordEditText,
+                            confirmPasswordEditText
+                        )
+                        getString(R.string.error_unacceptable_password)
+                    }
+                    password == confirmPassword -> {
+                        clearTextFor(
+                            passwordEditText,
+                            confirmPasswordEditText
+                        )
+                        getString(R.string.error_password_mismatch)
+                    }
+                    else -> {
+                        val loadingDialog = LoadingDialogFragment()
+                        loadingDialog.show(
+                            requireActivity().supportFragmentManager,
+                            getString(R.string.tag_loading_dialog)
+                        )
 
-                contextState.toast(
-                    when (false) {
-                        isStringPresent(name) || name.length > 1 -> {
-                            getString(R.string.message_enter_name)
-                        }
-                        isStringPresent(surname) || surname.length > 1 -> {
-                            getString(R.string.message_enter_surname)
-                        }
-                        isEmailValid(email) -> {
-                            getString(R.string.error_unacceptable_email)
-                        }
-                        isPasswordValid(password) -> {
-                            passwordEditText.setText("")
-                            confirmPasswordEditText.setText("")
-                            getString(R.string.error_unacceptable_password)
-                        }
-                        password == confirmPassword -> {
-                            passwordEditText.setText("")
-                            confirmPasswordEditText.setText("")
-                            getString(R.string.error_password_mismatch)
-                        }
-                        else -> {
-                            val loadingDialog = LoadingDialogFragment()
-                            loadingDialog.show(
-                                requireActivity().supportFragmentManager,
-                                getString(R.string.tag_loading_dialog)
-                            )
-
-                            isEmailPresent(email) { isPresent ->
-                                loadingDialog.dismiss()
-                                if (isPresent) {
-                                    log("Email taken already")
-                                    contextState.toast(getString(R.string.error_email_taken))
-                                } else {
-                                    val newUser = User(
-                                        email,
-                                        password,
-                                        name[0].uppercaseChar() + name.substring(1),
-                                        surname[0].uppercaseChar() + surname.substring(1),
-                                        uploadedImageString ?: ""
-                                    )
-
-                                    saveUserToCloud(newUser)
-                                    contextState.saveCurrentUser(newUser)
-
-                                    navController.navigate(R.id.action_registerFragment_to_accountFragment)
+                        isEmailPresent(email) {
+                            loadingDialog.dismiss()
+                            if (this) {
+                                log("Email taken already")
+                                contextState.toast(getString(R.string.error_email_taken))
+                            } else {
+                                User(
+                                    email,
+                                    password,
+                                    name[0].uppercaseChar() + name.substring(1),
+                                    surname[0].uppercaseChar() + surname.substring(1),
+                                    uploadedImageString ?: ""
+                                ).run {
+                                    saveToCloud()
+                                    saveToLocal(contextState)
                                 }
+
+                                navController.navigate(R.id.action_registerFragment_to_accountFragment)
                             }
-                            null
                         }
-                    })
+                        null
+                    }
+                }.showToast(contextState)
             }
 
             val navigationAction: (View) -> Unit = {
@@ -145,16 +150,19 @@ class RegisterFragment : Fragment() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == pickPhotoCode && resultCode == Activity.RESULT_OK && data != null) {
+        if (requestCode == pickPhotoCode &&
+            resultCode == Activity.RESULT_OK &&
+            data != null
+        ) {
             data.data?.let { uri ->
                 val bitmap = contextState.handleBitmap(uri)
 
-                with(photoImageView) {
+                uploadedImageString = bitmap.compress(30).convertToString()
+
+                photoImageView.run {
                     setImageBitmap(bitmap)
                     setBackgroundColor(resources.getColor(R.color.white))
                 }
-
-                uploadedImageString = bitmapToString(compressBitmap(bitmap, 30))
             }
         }
     }

@@ -52,7 +52,7 @@ class AccountFragment : Fragment() {
                 val imageString = currentUser.image
                 if (imageString.isNotEmpty()) {
                     setBackgroundColor(resources.getColor(R.color.white))
-                    setImageBitmap(stringToBitmap(imageString))
+                    setImageBitmap(imageString.convertToBitmap())
                 }
             }
 
@@ -83,22 +83,25 @@ class AccountFragment : Fragment() {
             data.data?.let { uri ->
                 val bitmap = contextState.handleBitmap(uri)
 
-                with(photoImageView) {
+                photoImageView.run {
                     setImageBitmap(bitmap)
                     setBackgroundColor(resources.getColor(R.color.white))
                 }
 
-                val imageString = bitmapToString(compressBitmap(bitmap, 30))
+                val imageString = bitmap.compress(30).convertToString()
                 saveUserImageToCloud(currentUser.email, imageString)
 
-                currentUser = User(
-                    currentUser.email,
-                    currentUser.password,
-                    currentUser.name,
-                    currentUser.surname,
-                    imageString
-                )
-                contextState.saveCurrentUser(currentUser)
+                currentUser = currentUser.run {
+                    User(
+                        email,
+                        password,
+                        name,
+                        surname,
+                        imageString
+                    ).apply {
+                        saveToLocal(contextState)
+                    }
+                }
             }
         }
     }

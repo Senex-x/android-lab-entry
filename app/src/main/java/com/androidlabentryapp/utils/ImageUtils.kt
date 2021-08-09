@@ -13,15 +13,14 @@ import androidx.annotation.RequiresApi
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
+import kotlin.math.roundToInt
 
 internal fun Context.handleBitmap(imageUri: Uri) =
-    cutBitmapToSquare(
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             handleBitmapCutAndSampling(imageUri)
         } else {
             getBitmapByUri(imageUri)
-        }
-    )
+        }.cutToSquare()
 
 private fun rotateImage(img: Bitmap, degree: Int): Bitmap {
     val matrix = Matrix()
@@ -34,12 +33,14 @@ private fun rotateImage(img: Bitmap, degree: Int): Bitmap {
 internal fun Context.getBitmapByUri(imageUri: Uri) =
     MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
 
-
 internal fun compressBitmap(bitmap: Bitmap, quality: Int): Bitmap {
     val out = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.JPEG, quality, out)
     return BitmapFactory.decodeStream(ByteArrayInputStream(out.toByteArray()))
 }
+
+internal fun Bitmap.compress(quality: Int) =
+    compressBitmap(this, quality)
 
 internal fun cutBitmapToSquare(sourceBitmap: Bitmap): Bitmap {
     val width = sourceBitmap.width
@@ -51,20 +52,25 @@ internal fun cutBitmapToSquare(sourceBitmap: Bitmap): Bitmap {
     }
 }
 
+internal fun Bitmap.cutToSquare() =
+    cutBitmapToSquare(this)
+
 internal fun bitmapToString(bitmap: Bitmap) =
     with(ByteArrayOutputStream()) {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, this)
         Base64.encodeToString(toByteArray(), Base64.DEFAULT)
     }
 
+internal fun Bitmap.convertToString() =
+    bitmapToString(this)
+
 internal fun stringToBitmap(encodedString: String) =
-    try {
-        val encodeByte = Base64.decode(encodedString, Base64.DEFAULT)
-        BitmapFactory.decodeByteArray(encodeByte, 0, encodeByte.size)
-    } catch (e: Exception) {
-        e.message
-        null
+    with(Base64.decode(encodedString, Base64.DEFAULT)) {
+        BitmapFactory.decodeByteArray(this, 0, size)
     }
+
+internal fun String.convertToBitmap() =
+    stringToBitmap(this)
 
 @RequiresApi(Build.VERSION_CODES.N)
 internal fun Context.handleBitmapCutAndSampling(selectedImage: Uri?): Bitmap {
@@ -100,8 +106,8 @@ private fun calculateInSampleSize(
     if (height > reqHeight || width > reqWidth) {
 
         // Calculate ratios of height and width to requested height and width
-        val heightRatio = Math.round(height.toFloat() / reqHeight.toFloat())
-        val widthRatio = Math.round(width.toFloat() / reqWidth.toFloat())
+        val heightRatio = (height.toFloat() / reqHeight.toFloat()).roundToInt()
+        val widthRatio = (width.toFloat() / reqWidth.toFloat()).roundToInt()
 
         // Choose the smallest ratio as inSampleSize value, this will guarantee a final image
         // with both dimensions larger than or equal to the requested height and width.

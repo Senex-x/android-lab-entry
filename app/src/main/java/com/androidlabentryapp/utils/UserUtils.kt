@@ -17,19 +17,28 @@ internal fun Context.isCurrentUserPresent() =
     }
 
 internal fun Context.getCurrentUser() =
-    deserializeObject<User>(getTextFromFile(CURRENT_USER_FILE_NAME))
+    getTextFromFile(CURRENT_USER_FILE_NAME).deserialize<User>()
+
+internal fun User.saveToLocal(context: Context) =
+    context.saveCurrentUser(this)
 
 internal fun Context.saveCurrentUser(user: User) =
     with(this) {
         log("Saving current user")
-        saveTextToFile(CURRENT_USER_FILE_NAME, serializeObject(user))
+        saveTextToFile(CURRENT_USER_FILE_NAME, user.serialize())
     }
 
 internal fun Context.deleteCurrentUser() =
     deleteFileWithLogging(CURRENT_USER_FILE_NAME)
 
-internal fun <T> serializeObject(generic: T) =
+private fun <T> serializeObject(generic: T) =
     Gson().toJson(generic)
+
+private fun <T> T.serialize() =
+    serializeObject(this)
 
 internal inline fun <reified T> deserializeObject(serializedSource: String) =
     Gson().fromJson(serializedSource, T::class.java)
+
+internal inline fun <reified T> String.deserialize() =
+    deserializeObject<T>(this)

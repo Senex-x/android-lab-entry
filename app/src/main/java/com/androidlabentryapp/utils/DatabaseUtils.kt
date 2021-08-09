@@ -10,12 +10,14 @@ import java.security.MessageDigest
 
 private val usersRef = FirebaseDatabase.getInstance().getReference("users")
 
-internal fun getUserKey(userEmail: String): String {
-    val md = MessageDigest.getInstance("MD5")
-    return BigInteger(1, md.digest(userEmail.toByteArray()))
+internal fun getUserKey(userEmail: String) =
+    BigInteger(
+        1,
+        MessageDigest.getInstance("MD5")
+            .digest(userEmail.toByteArray())
+    )
         .toString(16)
         .padStart(32, '0')
-}
 
 internal fun saveUserImageToCloud(userEmail: String, imageString: String) =
     with(imageString) {
@@ -23,6 +25,8 @@ internal fun saveUserImageToCloud(userEmail: String, imageString: String) =
         usersRef.child(getUserKey(userEmail)).child("image").setValue(imageString)
     }
 
+internal fun User.saveToCloud() =
+    saveUserToCloud(this)
 
 internal fun saveUserToCloud(user: User) =
     with(user) {
@@ -30,51 +34,47 @@ internal fun saveUserToCloud(user: User) =
         usersRef.child(getUserKey(email)).setValue(this)
     }
 
-internal fun getUserOrNull(email: String, password: String, callback: (User?) -> Unit) =
+internal fun getUserOrNull(email: String, password: String, callback: User?.() -> Unit) =
     usersRef.orderByChild("email").equalTo(email)
         .addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (userSnapshot in dataSnapshot.children) {
-                    if (password == userSnapshot.child("password").getValue(String::class.java)) {
-                        log(
-                            """Got matching user: 
-                            |$userSnapshot""".trimMargin()
-                        )
-                        callback.invoke(
+                log("Got data from Firebase:\n$dataSnapshot")
+                with(dataSnapshot.children.iterator().next()) {
+                        if (password == child("password").getData<String>()) {
+                            log("Got matching user:\n$this")
                             User(
                                 email,
                                 password,
-                                userSnapshot.child("name").getValue(String::class.java) ?: "",
-                                userSnapshot.child("surname").getValue(String::class.java) ?: "",
-                                userSnapshot.child("image").getValue(String::class.java) ?: ""
+                                child("name").getData<String>() ?: "",
+                                child("surname").getData<String>() ?: "",
+                                child("image").getData<String>() ?: ""
                             )
-                        )
-                    } else {
-                        callback.invoke(null)
-                    }
+                        } else {
+                            null
+                        }.callback()
                 }
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                log("Matching user not found")
-                callback.invoke(null)
+                log("Error while getting user from Firebase:\n$databaseError")
+                null.callback()
             }
         })
 
-internal fun isEmailPresent(email: String, callback: (Boolean) -> Unit) {
+internal fun isEmailPresent(email: String, callback: Boolean.() -> Unit) =
     usersRef.orderByChild("email").equalTo(email)
         .addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) =
-                callback.invoke(
-                    if (snapshot.value == null) {
-                        false
-                    } else {
-                        log("Found duplicate email for user: $snapshot")
-                        true
-                    }
-                )
+                if (snapshot.value == null) {
+                    false
+                } else {
+                    log("Found duplicate email for user: $snapshot")
+                    true
+                }.callback()
 
             override fun onCancelled(error: DatabaseError) =
-                callback.invoke(false)
+                false.callback()
         })
-}
+
+private inline fun <reified T> DataSnapshot.getData() =
+    this.getValue(T::class.java)
