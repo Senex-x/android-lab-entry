@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="message_enter_password">Введите пароль</string>
+    <string name="message_enter_login">Введите логин</string>
+    <string name="error_unacceptable_email">Недопустимый почтовый адрес</string>
+    <string name="error_unacceptable_password">Недопустимый пароль</string>
+    <string name="error_password_mismatch">Пароли не совпадают</string>
+    <string name="error_email_taken">Почтовый адрес занят</string>
+    <string name="error_user_not_found">Пользователь не найден</string>
+    <string name="error_fail">Неудача</string>
+</resources>

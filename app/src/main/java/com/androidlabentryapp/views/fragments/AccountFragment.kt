@@ -1,5 +1,6 @@
 package com.androidlabentryapp.views.fragments
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -14,6 +15,9 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.fragment.findNavController
 import com.androidlabentryapp.R
+import com.androidlabentryapp.databinding.FragmentAccountBinding
+import com.androidlabentryapp.databinding.FragmentAuthBinding
+import com.androidlabentryapp.databinding.FragmentRegisterBinding
 import com.androidlabentryapp.models.User
 import com.androidlabentryapp.utils.*
 
@@ -26,10 +30,14 @@ class AccountFragment : Fragment() {
 
     private lateinit var photoImageView: ImageView
 
+    private var _binding: FragmentAccountBinding? = null
+    private val binding
+        get() = _binding!!
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        navController = this.findNavController()
+        navController = findNavController()
         contextState = requireContext()
         currentUser = contextState.getCurrentUser()
     }
@@ -38,71 +46,74 @@ class AccountFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val rootView = inflater.inflate(R.layout.fragment_account, container, false)
-
-        initUi(rootView)
-
-        return rootView
+    ): View {
+        _binding = FragmentAccountBinding.inflate(inflater, container, false)
+        return binding.apply { initUi() }.root
     }
 
-    private fun initUi(rootView: View) {
-        with(rootView) {
-            photoImageView = findViewById<ImageView>(R.id.account_image_photo).apply {
-                val imageString = currentUser.image
-                if (imageString.isNotEmpty()) {
-                    setBackgroundColor(resources.getColor(R.color.white))
-                    setImageBitmap(imageString.convertToBitmap())
-                }
+    @SuppressLint("SetTextI18n")
+    private fun FragmentAccountBinding.initUi() {
+        photoImageView = accountImagePhoto.apply {
+            val imageString = currentUser.image
+            if (imageString.isNotEmpty()) {
+                setBackgroundColor(resources.getColor(R.color.white))
+                setImageBitmap(imageString.convertToBitmap())
             }
+        }
 
-            findViewById<Button>(R.id.account_button_upload_photo).setOnClickListener {
-                startActivityForResult(
-                    Intent(Intent.ACTION_PICK).apply {
-                        type = "image/*"
-                    }, pickPhotoCode
-                )
-            }
+        accountButtonUploadPhoto.setOnClickListener {
+            startActivityForResult(
+                Intent(Intent.ACTION_PICK).apply {
+                    type = "image/*"
+                }, pickPhotoCode
+            )
+        }
 
-            findViewById<TextView>(R.id.account_text_name).text =
-                currentUser.name + " " + currentUser.surname
+        accountTextName.text =
+            currentUser.name + " " + currentUser.surname
 
-            findViewById<TextView>(R.id.account_text_email).text =
-                currentUser.email
+        accountTextEmail.text =
+            currentUser.email
 
-            findViewById<Button>(R.id.account_button_log_out).setOnClickListener {
-                contextState.deleteCurrentUser()
-                navController.navigate(R.id.action_accountFragment_to_authFragment)
-            }
+        accountButtonLogOut.setOnClickListener {
+            contextState.deleteCurrentUser()
+            navController.navigate(R.id.action_accountFragment_to_authFragment)
         }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == pickPhotoCode && resultCode == Activity.RESULT_OK && data != null) {
-            data.data?.let { uri ->
-                val bitmap = contextState.handleBitmap(uri)
 
-                photoImageView.run {
-                    setImageBitmap(bitmap)
-                    setBackgroundColor(resources.getColor(R.color.white))
-                }
+        if (requestCode != pickPhotoCode || resultCode != Activity.RESULT_OK || data == null || data.data == null) {
+            contextState.toast(getString(R.string.error_fail))
+            return
+        }
 
-                val imageString = bitmap.compress(30).convertToString()
-                saveUserImageToCloud(currentUser.email, imageString)
+        val bitmap = contextState.handleBitmap(imageUri = data.data!!)
 
-                currentUser = currentUser.run {
-                    User(
-                        email,
-                        password,
-                        name,
-                        surname,
-                        imageString
-                    ).apply {
-                        saveToLocal(contextState)
-                    }
-                }
+        photoImageView.run {
+            setImageBitmap(bitmap)
+            setBackgroundColor(resources.getColor(R.color.white))
+        }
+
+        val imageString = bitmap.compress(30).convertToString()
+
+        currentUser = currentUser.run {
+            User(
+                email,
+                password,
+                name,
+                surname,
+                imageString
+            ).apply {
+                updateImage(imageString)
+                saveToLocal(contextState)
             }
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }

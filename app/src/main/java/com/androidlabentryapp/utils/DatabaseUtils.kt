@@ -25,6 +25,9 @@ internal fun saveUserImageToCloud(userEmail: String, imageString: String) =
         usersRef.child(getUserKey(userEmail)).child("image").setValue(imageString)
     }
 
+internal fun User.updateImage(imageString: String) =
+    saveUserImageToCloud(this.email, imageString)
+
 internal fun User.saveToCloud() =
     saveUserToCloud(this)
 
