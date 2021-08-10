@@ -83,7 +83,7 @@ class AccountFragment : Fragment() {
 
     private fun handleChosenUri(): (Uri?) -> Unit = handler@{
         if (it == null) {
-            contextState.toast(getString(R.string.error_photo_not_picked))
+            contextState.toast(R.string.error_photo_not_picked)
             return@handler
         }
 

@@ -73,27 +73,27 @@ class RegisterFragment : Fragment() {
 
             when (false) {
                 name.isValidString(minLength = 2) -> {
-                    getString(R.string.message_enter_name)
+                    R.string.message_enter_name
                 }
                 surname.isValidString(minLength = 2) -> {
-                    getString(R.string.message_enter_surname)
+                    R.string.message_enter_surname
                 }
                 isEmailValid(email) -> {
-                    getString(R.string.error_unacceptable_email)
+                    R.string.error_unacceptable_email
                 }
                 isPasswordValid(password) -> {
                     clearTextFor(
                         registerEditTextPassword,
                         registerEditTextPasswordConfirm
                     )
-                    getString(R.string.error_unacceptable_password)
+                    R.string.error_unacceptable_password
                 }
                 password == confirmPassword -> {
                     clearTextFor(
                         registerEditTextPassword,
                         registerEditTextPasswordConfirm
                     )
-                    getString(R.string.error_password_mismatch)
+                    R.string.error_password_mismatch
                 }
                 else -> {
                     val loadingDialog = LoadingDialogFragment().apply {
@@ -107,7 +107,7 @@ class RegisterFragment : Fragment() {
                         loadingDialog.dismiss()
                         if (this) {
                             log("Email is already taken")
-                            contextState.toast(getString(R.string.error_email_taken))
+                            contextState.getString(R.string.error_email_taken)
                             return@check
                         }
 
@@ -142,7 +142,7 @@ class RegisterFragment : Fragment() {
 
     private fun handleChosenUri(): (Uri?) -> Unit = handler@{
         if(it == null) {
-            contextState.toast(getString(R.string.error_photo_not_picked))
+            contextState.toast(R.string.error_photo_not_picked)
             return@handler
         }
         val bitmap = contextState.handleBitmap(imageUri = it)

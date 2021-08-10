@@ -64,11 +64,11 @@ class AuthFragment : Fragment() {
 
             when (false) {
                 isEmailValid(email) -> {
-                    getString(R.string.error_unacceptable_email)
+                    R.string.error_unacceptable_email
                 }
                 isPasswordValid(password) -> {
                     passwordEditText.clearText()
-                    getString(R.string.error_unacceptable_password)
+                    R.string.error_unacceptable_password
                 }
                 else -> {
                     val loadingDialog = LoadingDialogFragment()
@@ -86,8 +86,7 @@ class AuthFragment : Fragment() {
 
                             saveToLocal(contextState)
                             navigateToAccount()
-                        } ?: getString(R.string.error_user_not_found)
-                            .showToast(contextState)
+                        } ?: R.string.error_user_not_found.showToast(contextState)
 
                         loadingDialog.dismiss()
                     }

@@ -5,7 +5,6 @@ import android.content.Context
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import android.widget.TextView
 import android.widget.Toast
 import java.util.regex.Pattern
 
@@ -15,10 +14,18 @@ internal const val EMAIL_VALIDATION_REGEX =
 internal const val PASSWORD_VALIDATION_REGEX =
     "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d).+\$"
 
+internal fun Context.toast(messageId: Int?) =
+    messageId?.let {
+        Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+    } ?: Unit
+
+internal fun Int?.showToast(context: Context) =
+    context.toast(this)
+
 internal fun Context.toast(message: String?) =
     message?.let {
         Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-    }
+    } ?: Unit
 
 internal fun String?.showToast(context: Context) =
     context.toast(this)
@@ -55,7 +62,6 @@ internal fun clearTextFor(vararg fields: EditText) {
     }
 }
 
-// TODO: Index exception handling
 internal fun getTextFrom(vararg fields: EditText) =
     FiveFieldsTextHolder().also(
         fun(holder: FiveFieldsTextHolder) { // Declared as anonymous to allow local return
