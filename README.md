@@ -1,14 +1,3 @@
-# Extra info
-* I have started to make android apps about **two years** ago.
-Now I have 5 pet projects, three of which deserve a little bit of attention.
-* For the first year of study I have average for programming subjects around ~95.
-* Also I understand the **core of Java and Kotlin** languages. :+1:
-
-### Interesting apps:
-* Almost fully made by me - [App for Ferenetz practice](https://github.com/Senex-x/TextBuilder-app)
-* With significant contribution - [App for SimbirSoft's summer practice](https://github.com/Senex-x/tutors_notebook)
-* Made by me, like a year ago - [Old chat app](https://github.com/Senex-x/TextMe)
-
 # Android Entry App
 
 ## Log in screen
